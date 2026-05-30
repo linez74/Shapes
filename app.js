@@ -106,12 +106,12 @@ const particleMaterial = new THREE.MeshBasicMaterial({
     color: 0xffffff
 });
 
-//function hideLoadingScreen() {
-   // const el = document.getElementById("loading-screen");
-    //if (el) {
-      //  el.classList.add("hidden");
-    //}
-//}
+function hideLoadingScreen() {
+   const el = document.getElementById("loading-screen");
+    if (el) {
+        el.classList.add("hidden");
+    }
+}
 
 function spawnParticle(x, y, z, color, size = 1) {
     let p;
