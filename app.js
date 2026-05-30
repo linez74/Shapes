@@ -106,6 +106,13 @@ const particleMaterial = new THREE.MeshBasicMaterial({
     color: 0xffffff
 });
 
+function hideLoadingScreen() {
+    const el = document.getElementById("loading-screen");
+    if (el) {
+        el.classList.add("hidden");
+    }
+}
+
 function spawnParticle(x, y, z, color, size = 1) {
     let p;
 
@@ -136,6 +143,10 @@ async function updateHands() {
         video,
         performance.now()
     );
+
+    if (result.landmarks && result.landmarks.length > 0) {
+    hideLoadingScreen();
+}
 
     if (!result.landmarks) return;
 
