@@ -116,14 +116,15 @@ function hideLoadingScreen() {
 function spawnParticle(x, y, z, color, size = 1) {
     let p;
 
-    if (particles.length < maxParticles) {
+    if (!p) {
         p = new THREE.Mesh(particleGeometry, particleMaterial.clone());
         scene.add(p);
         particles.push(p);
-    } else {
-        p = particles.shift();
-        particles.push(p);
-    }
+    } 
+    //else {
+        //p = particles.shift();
+        //particles.push(p);
+    //}
 
     p.position.set(x, y, z);
     p.material.color = color;
