@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Particle Universe</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Import Map -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.164.1/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- Hidden webcam feed -->
+    <video
+        id="webcam"
+        autoplay
+        playsinline
+        muted
+    ></video>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <h1>Hand Particle Universe</h1>
+        <p>Initializing Camera & Hand Tracking...</p>
+    </div>
+
+    <!-- UI Overlay -->
+    <div id="ui">
+
+        <div class="panel">
+            <h2>Hand Universe</h2>
+
+            <div class="stat">
+                <span>FPS</span>
+                <span id="fps">0</span>
+            </div>
+
+            <div class="stat">
+                <span>Hands</span>
+                <span id="hands-count">0</span>
+            </div>
+
+            <div class="stat">
+                <span>Particles</span>
+                <span id="particle-count">0</span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Main Canvas gets injected by Three.js -->
+
+    <!-- App -->
+    <script type="module" src="app.js"></script>
+
+</body>
+</html>
