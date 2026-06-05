@@ -92,98 +92,50 @@ const handLandmarker =
     );
 
 //////////////////////////////////////////////////////////
-// GPU PARTICLES
+// PARTICLES
 //////////////////////////////////////////////////////////
 
-const MAX_PARTICLES = 50000;
+const particles = [];
+const maxParticles = 5000;
 
-const particlePositions = new Float32Array(
-    MAX_PARTICLES * 3
-);
-
-const particleColors = new Float32Array(
-    MAX_PARTICLES * 3
-);
-
-let particleCount = 0;
-
-const particlesGeometry =
-    new THREE.BufferGeometry();
-
-particlesGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(
-        particlePositions,
-        3
-    )
-);
-
-particlesGeometry.setAttribute(
-    "color",
-    new THREE.BufferAttribute(
-        particleColors,
-        3
-    )
-);
-
-particlesGeometry.setDrawRange(
-    0,
-    0
-);
-
-const particlesMaterial =
-    new THREE.PointsMaterial({
-        size: 1.2,
-        vertexColors: true,
-        transparent: true,
-        opacity: 1
-    });
-
-const particleSystem =
-    new THREE.Points(
-        particlesGeometry,
-        particlesMaterial
-    );
-
-scene.add(particleSystem);
+const particleGeometry =
+    new THREE.SphereGeometry(0.5, 8, 8);
 
 function spawnParticle(
     x,
     y,
     z,
-    color
+    color,
+    size = 1
 ) {
 
-    if (
-        particleCount >=
-        MAX_PARTICLES
-    )
+    if (particles.length >= maxParticles)
         return;
 
-    const i =
-        particleCount * 3;
+    const material =
+        new THREE.MeshBasicMaterial({
+            color: color
+        });
 
-    particlePositions[i] = x;
-    particlePositions[i + 1] = y;
-    particlePositions[i + 2] = z;
+    const particle =
+        new THREE.Mesh(
+            particleGeometry,
+            material
+        );
 
-    particleColors[i] = color.r;
-    particleColors[i + 1] = color.g;
-    particleColors[i + 2] = color.b;
-
-    particleCount++;
-
-    particlesGeometry.setDrawRange(
-        0,
-        particleCount
+    particle.position.set(
+        x,
+        y,
+        z
     );
 
-    particlesGeometry.attributes.position.needsUpdate =
-        true;
+    particle.scale.setScalar(size);
 
-    particlesGeometry.attributes.color.needsUpdate =
-        true;
+    scene.add(particle);
+
+    particles.push(particle);
 }
+
 //////////////////////////////////////////////////////////
 // DRAWING LINES
 //////////////////////////////////////////////////////////
@@ -239,26 +191,16 @@ function pushParticles(
     cz
 ) {
 
-    for (
-        let i = 0;
-        i < particleCount;
-        i++
-    ) {
+    for (const p of particles) {
 
-        const idx = i * 3;
+        const dx =
+            p.position.x - cx;
 
-        const px =
-            particlePositions[idx];
+        const dy =
+            p.position.y - cy;
 
-        const py =
-            particlePositions[idx + 1];
-
-        const pz =
-            particlePositions[idx + 2];
-
-        const dx = px - cx;
-        const dy = py - cy;
-        const dz = pz - cz;
+        const dz =
+            p.position.z - cz;
 
         const dist = Math.sqrt(
             dx * dx +
@@ -274,25 +216,16 @@ function pushParticles(
             const power =
                 (25 - dist) / 25;
 
-            particlePositions[idx] +=
-                dx *
-                power *
-                0.2;
+            p.position.x +=
+                dx * power * 0.2;
 
-            particlePositions[idx + 1] +=
-                dy *
-                power *
-                0.2;
+            p.position.y +=
+                dy * power * 0.2;
 
-            particlePositions[idx + 2] +=
-                dz *
-                power *
-                0.2;
+            p.position.z +=
+                dz * power * 0.2;
         }
     }
-
-    particlesGeometry.attributes.position.needsUpdate =
-        true;
 }
 
 //////////////////////////////////////////////////////////
@@ -367,7 +300,8 @@ function updateHands() {
             ix,
             iy,
             iz,
-            color
+            color,
+            1.5
         );
 
         //////////////////////////////////////////////////
@@ -453,7 +387,7 @@ function updateUI() {
             "2";
 
         particlesEl.textContent =
-            particlecount;
+            particles.length;
 
         frames = 0;
 
